@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madhya Bharat News</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+</head>
+<body>
+
+<!-- ===== TOP HEADER WITH BACKGROUND ===== -->
+<div class="top-header">
+    <div class="logo">
+        <!-- Apna logo image path yaha daale -->
+        <img src="logo.png" alt="Madhya Bharat News Logo">
+    </div>
+</div>
+
+<!-- ===== MENU ===== -->
+<nav class="navbar" style="margin-top: 6px;">
+    <ul class="menu">
+                <li class="search-menu-item"><a href="javascript:void(0);" onclick="toggleSearch()"> <i class="fas fa-magnifying-glass">  </i></a></li>
+        <li><a href="index.html" >होम</a></li>
+        <li><a href="taja-khabar.html">ताज़ा खबर</a></li>
+        <li><a href="madhya pradesh.html">मध्य प्रदेश</a></li>
+        <li><a href="vindhya.html">विंध्य</a></li>
+        <li><a href="Rewa.html">रीवा</a></li>
+        <li><a href="satna.html">सतना</a></li>
+        <li><a href="maihar.html">मैहर</a></li>
+        <li><a href="seedhi.html">सीधी</a></li>
+        <li><a href="maihar.html">मऊगंज</a></li>
+        <li><a href="chattarpur.html" >छतरपुर</a></li>
+        <li><a href="panna.html" >पन्ना</a></li>
+        <li><a href="sahadol.html">शहडोल</a></li>
+        <li><a href="rajneeti.html" >राजनीति</a></li>
+        <li><a href="crime.html" class="active">क्राइम</a></li>
+    </ul>
+</nav>
+
+<div class="breaking-news">
+  <div class="ticker-title">ब्रेकिंग न्यूज़</div>
+  <div class="ticker-content" id="breakingNews"></div>
+</div>
+
+<script>
+function toggleSearch() {
+    const search = document.getElementById('searchNews');
+    if (search.style.display === "block") {
+        search.style.display = "none";
+    } else {
+        search.style.display = "block";
+        search.focus();
+    }
+}
+
+fetch('news.json')
+  .then(res => res.json())
+  .then(news => {
+    const breaking = document.getElementById('breakingNews');
+    news.filter(post => post.breaking).forEach(post => {
+      breaking.innerHTML += `<span><b>• ${post.title}</b> </span>`;
+    });
+  });
+</script>
+
+<div style="display:flex; gap:20px;">
+
+    <!-- Main news section -->
+    <div style="flex:3">
+        <div class="latest-news-section">
+            <h2 class="section-title">समाचार</h2>
+            <div class="news-container" id="newsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Latest news sidebar -->
+    <div style="flex:1" class="latest-news">
+        <h3>ताज़ा समाचार</h3>
+        <ul id="latestNewsSidebar" style="list-style:none; padding:0;"></ul>
+    </div>
+
+</div>
+
+<script>
+const news = JSON.parse(localStorage.getItem('news')) || [];
+const currentPage = 'crime'; // Change per page
+const container = document.getElementById('newsContainer');
+const sidebar = document.getElementById('latestNewsSidebar');
+
+news.filter(post => post.page === currentPage).forEach(post => {
+    // Add news card
+    container.innerHTML += `
+        <div class="news-card" id="news${post.id}">
+            <div class="news-image"><img src="${post.image}" alt="${post.title}"></div>
+            <div class="news-content">
+                <h3>${post.title}</h3>
+                <button class="read-btn" onclick="toggle(${post.id})">Read More</button>
+                <div id="post${post.id}" class="news-extra">
+                    <p>${post.description}</p>
+                    <small><b>Author :</b> <i>${post.author}</i></small>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Add to latest news sidebar
+    sidebar.innerHTML += `<li style="margin-bottom:10px; cursor:pointer; color:#ff0000;" onclick="scrollToNews(${post.id})">${post.title}</li>`;
+});
+
+// Toggle description
+function toggle(id){
+    const el = document.getElementById('post'+id);
+    el.style.display = el.style.display === "none" ? "block" : "none";
+}
+
+// Scroll to news card on clicking sidebar item
+function scrollToNews(id){
+    const newsEl = document.getElementById('news'+id);
+    newsEl.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+</script>
+</body>
+</html>
