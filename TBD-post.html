@@ -2,189 +2,317 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<title>Admin Login</title>
+<title>Admin Panel</title>
+
 <style>
-body { font-family: Arial; background: #f4f4f7; padding: 50px; }
-form { max-width: 400px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
-input, select, button, textarea { width: 100%; margin: 10px 0; padding: 10px; }
-button { background: #ff0000; color: #fff; border: none; cursor: pointer; }
-button:hover { background: #cc0000; }
-.post-container { max-width: 600px; margin: 20px auto; }
-.post { background: #fff; padding: 15px; margin-bottom: 10px; border-radius: 10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
-.post img { max-width: 100%; height: auto; border-radius: 5px; }
-.delete-btn, .edit-btn { margin-top: 10px; }
-.delete-btn { background: #555; }
-.delete-btn:hover { background: #333; }
-.edit-btn { background: #007bff; }
-.edit-btn:hover { background: #0056b3; }
+
+body{
+font-family:'Segoe UI',Arial;
+background:#f8f5f5;
+padding:30px;
+margin:0;
+}
+
+h2{
+text-align:center;
+color:#8b1e1e;
+}
+
+form{
+max-width:420px;
+margin:auto;
+background:#fff;
+padding:25px;
+border-radius:14px;
+box-shadow:0 6px 18px rgba(139,30,30,0.08);
+border:1px solid #f1dada;
+}
+
+input,button,textarea{
+width:100%;
+margin:10px 0;
+padding:12px;
+border-radius:8px;
+border:1px solid #e6cfcf;
+font-size:14px;
+background:#fffafa;
+}
+
+button{
+background:#c94c4c;
+color:#fff;
+border:none;
+cursor:pointer;
+}
+
+button:hover{
+background:#a83232;
+}
+
+textarea{
+resize:vertical;
+}
+
+.post-container{
+max-width:750px;
+margin:35px auto;
+}
+
+.post{
+background:#fff;
+padding:22px;
+margin-bottom:18px;
+border-radius:14px;
+box-shadow:0 4px 12px rgba(139,30,30,0.06);
+border-left:5px solid #c94c4c;
+}
+
+.post img{
+max-width:100%;
+border-radius:10px;
+margin-top:12px;
+}
+
+.delete-btn{
+background:#b55;
+margin-top:12px;
+padding:7px 14px;
+color:#fff;
+border:none;
+cursor:pointer;
+border-radius:6px;
+}
+
+.delete-btn:hover{
+background:#922;
+}
+
+/* PROFESSIONAL PAGE SELECTOR */
+
+.page-box{
+margin-top:10px;
+}
+
+.page-title{
+font-weight:600;
+margin-bottom:5px;
+}
+
+.page-list{
+border:1px solid #e6cfcf;
+border-radius:8px;
+padding:10px;
+max-height:180px;
+overflow-y:auto;
+background:#fffafa;
+}
+
+.page-list label{
+display:block;
+padding:6px;
+cursor:pointer;
+font-size:14px;
+}
+
+.page-list input{
+margin-right:8px;
+}
+
 </style>
 </head>
+
 <body>
 
-<h2 style="text-align:center;">Admin Login</h2>
+<h2>Admin Login</h2>
 
 <form id="loginForm">
-    Username: <input type="text" id="username" required>
-    Password: <input type="password" id="password" required>
-    <button type="submit">Login</button>
+
+<input type="text" id="username" placeholder="Username" required>
+
+<input type="password" id="password" placeholder="Password" required>
+
+<button type="submit">Login</button>
+
 </form>
 
-<form id="postForm" style="display:none;">
-    <h3>Create/Edit News Post</h3>
-    Title: <input type="text" id="title" required>
-    Description: <textarea id="description" rows="5" required></textarea>
-    Author: <input type="text" id="author" required>
-    Page:
-    <select id="page">
-        <option value="home">होम</option>
-        <option value="taja-khabar">ताज़ा खबर</option>
-        <option value="madhya pradesh">मध्य प्रदेश</option>
-        <option value="vindhya">विंध्य</option>
-        <option value="Rewa">रीवा</option>
-        <option value="satna">सतना</option>
-        <option value="maihar">मैहर</option>
-        <option value="seedhi">सीधी</option>
-        <option value="maugang">मऊगंज</option>
-        <option value="chattarpur">छतरपुर</option>
-        <option value="panna">पन्ना</option>
-        <option value="sahadol">शहडोल</option>
-        <option value="rajneeti">राजनीति</option>
-        <option value="crime">क्राइम</option>
-    </select>
-    Thumbnail: <input type="file" id="image" accept="image/*">
-    <button type="submit">Post</button>
+
+<form id="postForm" style="display:none;" enctype="multipart/form-data">
+
+<h3>Create News Post</h3>
+
+<input type="text" id="title" name="title" placeholder="Title" required>
+
+<textarea id="description" name="description" rows="5" placeholder="Description" required></textarea>
+
+<input type="text" id="author" name="author" placeholder="Author" required>
+
+
+<div class="page-box">
+
+<div class="page-title">Select Pages</div>
+
+<div class="page-list">
+
+<label><input type="checkbox" name="page[]" value="home"> होम</label>
+
+<label><input type="checkbox" name="page[]" value="taja-khabar"> ताज़ा खबर</label>
+
+<label><input type="checkbox" name="page[]" value="madhya pradesh"> मध्य प्रदेश</label>
+
+<label><input type="checkbox" name="page[]" value="vindhya"> विंध्य</label>
+
+<label><input type="checkbox" name="page[]" value="Rewa"> रीवा</label>
+
+<label><input type="checkbox" name="page[]" value="satna"> सतना</label>
+
+<label><input type="checkbox" name="page[]" value="maihar"> मैहर</label>
+
+<label><input type="checkbox" name="page[]" value="seedhi"> सीधी</label>
+
+<label><input type="checkbox" name="page[]" value="maugang"> मऊगंज</label>
+
+<label><input type="checkbox" name="page[]" value="chattarpur"> छतरपुर</label>
+
+<label><input type="checkbox" name="page[]" value="panna"> पन्ना</label>
+
+<label><input type="checkbox" name="page[]" value="sahadol"> शहडोल</label>
+
+<label><input type="checkbox" name="page[]" value="rajneeti"> राजनीति</label>
+
+<label><input type="checkbox" name="page[]" value="crime"> क्राइम</label>
+
+</div>
+
+</div>
+
+
+<input type="file" id="image" name="image" accept="image/*" required>
+
+<button type="submit">Post</button>
+
 </form>
 
-<p id="msg" style="text-align:center; color:green;"></p>
+<p id="msg" style="text-align:center;color:green;"></p>
 
 <div class="post-container" id="postContainer"></div>
 
+
 <script>
-const adminUser = "admin";
-const adminPass = "1234";
 
-const loginForm = document.getElementById('loginForm');
-const postForm = document.getElementById('postForm');
-const msg = document.getElementById('msg');
-const postContainer = document.getElementById('postContainer');
+const adminUser="admin";
+const adminPass="1234";
 
-let editPostId = null; // Track if editing
+const loginForm=document.getElementById('loginForm');
+const postForm=document.getElementById('postForm');
+const msg=document.getElementById('msg');
+const postContainer=document.getElementById('postContainer');
 
-// Login
-loginForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    
-    if(username === adminUser && password === adminPass){
-        loginForm.style.display = "none";
-        postForm.style.display = "block";
-        msg.innerText = "Logged in successfully!";
-        displayPosts();
-    } else {
-        alert("Invalid credentials!");
-    }
+
+loginForm.addEventListener('submit',e=>{
+
+e.preventDefault();
+
+const username=document.getElementById('username').value;
+const password=document.getElementById('password').value;
+
+if(username===adminUser && password===adminPass){
+
+loginForm.style.display="none";
+postForm.style.display="block";
+msg.innerText="Logged in successfully!";
+
+loadPosts();
+
+}else{
+
+alert("Invalid credentials!");
+
+}
+
 });
 
-// Display posts
-function displayPosts() {
-    let news = JSON.parse(localStorage.getItem('news')) || [];
-    postContainer.innerHTML = "";
-    news.forEach(post => {
-        const postDiv = document.createElement('div');
-        postDiv.className = "post";
-        postDiv.innerHTML = `
-            <h4>${post.title}</h4>
-            <p><strong>Author:</strong> ${post.author} | <strong>Page:</strong> ${post.page}</p>
-            <p>${post.description}</p>
-            ${post.image ? `<img src="${post.image}">` : ""}
-            <button class="edit-btn" onclick="editPost(${post.id})">Edit</button>
-            <button class="delete-btn" onclick="deletePost(${post.id})">Delete</button>
-        `;
-        postContainer.appendChild(postDiv);
-    });
+
+postForm.addEventListener('submit',e=>{
+
+e.preventDefault();
+
+const formData=new FormData(postForm);
+
+fetch('upload_post.php',{
+method:'POST',
+body:formData
+})
+.then(res=>res.json())
+.then(data=>{
+
+alert(data.message);
+
+if(data.status==='success'){
+
+postForm.reset();
+loadPosts();
+
 }
 
-// Delete post
-function deletePost(id) {
-    let news = JSON.parse(localStorage.getItem('news')) || [];
-    news = news.filter(post => post.id !== id);
-    localStorage.setItem('news', JSON.stringify(news));
-    displayPosts();
-}
+})
+.catch(err=>console.error(err));
 
-// Edit post
-function editPost(id) {
-    let news = JSON.parse(localStorage.getItem('news')) || [];
-    const post = news.find(p => p.id === id);
-    if(post){
-        document.getElementById('title').value = post.title;
-        document.getElementById('description').value = post.description;
-        document.getElementById('author').value = post.author;
-        document.getElementById('page').value = post.page;
-        editPostId = id; // set edit mode
-    }
-}
-
-// Handle news posting
-postForm.addEventListener('submit', e => {
-    e.preventDefault();
-    
-    const title = document.getElementById('title').value;
-    const description = document.getElementById('description').value;
-    const author = document.getElementById('author').value;
-    const page = document.getElementById('page').value;
-    const imageFile = document.getElementById('image').files[0];
-
-    let news = JSON.parse(localStorage.getItem('news')) || [];
-
-    const savePost = (imageBase64=null) => {
-        if(editPostId){ 
-            // Update existing
-            news = news.map(post => {
-                if(post.id === editPostId){
-                    return {
-                        ...post,
-                        title,
-                        description,
-                        author,
-                        page,
-                        image: imageBase64 || post.image
-                    }
-                }
-                return post;
-            });
-            localStorage.setItem('news', JSON.stringify(news));
-            alert("Post updated successfully!");
-        } else {
-            // New post
-            const newPost = {
-                id: Date.now(),
-                title,
-                description,
-                author,
-                page,
-                image: imageBase64 || ""
-            };
-            news.push(newPost);
-            localStorage.setItem('news', JSON.stringify(news));
-            alert("Post uploaded successfully!");
-        }
-        postForm.reset();
-        editPostId = null;
-        displayPosts();
-    }
-
-    if(imageFile){
-        const reader = new FileReader();
-        reader.onload = function(){
-            savePost(reader.result);
-        }
-        reader.readAsDataURL(imageFile);
-    } else {
-        savePost();
-    }
 });
+
+
+function loadPosts(){
+
+fetch('news.json')
+.then(res=>res.json())
+.then(news=>{
+
+postContainer.innerHTML="";
+
+news.forEach(post=>{
+
+const div=document.createElement('div');
+
+div.className="post";
+
+div.innerHTML=`
+
+<h4>${post.title}</h4>
+
+<p><strong>Author:</strong> ${post.author} | <strong>Page:</strong> ${post.page}</p>
+
+<p>${post.description}</p>
+
+${post.image ? `<img src="${post.image}">` : ""}
+
+<button class="delete-btn" onclick="deletePost(${post.id})">Delete</button>
+
+`;
+
+postContainer.appendChild(div);
+
+});
+
+});
+
+}
+
+
+function deletePost(id){
+
+if(!confirm("Are you sure to delete this post?")) return;
+
+fetch(`delete_post.php?id=${id}`)
+.then(res=>res.json())
+.then(data=>{
+
+alert(data.message);
+
+if(data.status==='success') loadPosts();
+
+});
+
+}
+
 </script>
 
 </body>

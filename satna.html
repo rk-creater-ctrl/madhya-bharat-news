@@ -7,15 +7,13 @@
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 </head>
 
 <body>
 
-<!-- ===== TOP HEADER WITH BACKGROUND ===== -->
+<!-- ===== TOP HEADER ===== -->
 <div class="top-header">
     <div class="logo">
-        <!-- Apna logo image path yaha daale -->
         <img src="logo.png" alt="Madhya Bharat News Logo">
     </div>
 </div>
@@ -23,12 +21,16 @@
 <!-- ===== MENU ===== -->
 <nav class="navbar" style="margin-top: 6px;">
     <ul class="menu">
-                <li class="search-menu-item"><a href="javascript:void(0);" onclick="toggleSearch()"> <i class="fas fa-magnifying-glass">  </i></a></li>
-        <li><a href="index.html"><b>होम</b></a></li>
-        <li><a href="taja-khabar.html" >ताज़ा खबर</a></li>
+        <li class="search-menu-item">
+            <a href="javascript:void(0);" onclick="toggleSearch()">
+                <i class="fas fa-magnifying-glass"></i>
+            </a>
+        </li>
+        <li><a href="index.html" >होम</a></li>
+        <li><a href="taja-khabar.html">ताज़ा खबर</a></li>
         <li><a href="madhya pradesh.html">मध्य प्रदेश</a></li>
         <li><a href="vindhya.html">विंध्य</a></li>
-        <li><a href="Rewa.html" >रीवा</a></li>
+        <li><a href="Rewa.html">रीवा</a></li>
         <li><a href="satna.html" class="active">सतना</a></li>
         <li><a href="maihar.html">मैहर</a></li>
         <li><a href="seedhi.html">सीधी</a></li>
@@ -41,12 +43,39 @@
     </ul>
 </nav>
 
+<!-- ===== BREAKING NEWS ===== -->
 <div class="breaking-news">
   <div class="ticker-title">ब्रेकिंग न्यूज़</div>
   <div class="ticker-content" id="breakingNews"></div>
 </div>
 
+<!-- ===== SEARCH BAR ===== -->
+<div class="search-container">
+    <input type="text" id="searchNews" placeholder="खबर खोजें..." style="display:none;" oninput="searchNews()">
+</div>
+
+<!-- ===== NEWS LAYOUT ===== -->
+<div style="display:flex; gap:20px; flex-wrap: wrap;">
+
+    <!-- Main news section -->
+    <div style="flex:3; min-width:300px;">
+        <div class="latest-news-section">
+            <h2 class="section-title">समाचार</h2>
+            <div class="news-container" id="newsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Latest news sidebar -->
+    <div class="latest-news" style="min-width:250px;">
+        <h3>ताज़ा समाचार</h3>
+        <ul id="latestNewsSidebar" style="list-style:none; padding:0;"></ul>
+    </div>
+
+</div>
+
 <script>
+
+// Toggle search input
 function toggleSearch() {
     const search = document.getElementById('searchNews');
     if (search.style.display === "block") {
@@ -57,71 +86,171 @@ function toggleSearch() {
     }
 }
 
-fetch('news.json')
-  .then(res => res.json())
-  .then(news => {
-    const breaking = document.getElementById('breakingNews');
-    news.filter(post => post.breaking).forEach(post => {
-      breaking.innerHTML += `<span><b>• ${post.title}</b> </span>`;
-    });
-  });
-</script>
-
-<div style="display:flex; gap:20px;">
-
-    <!-- Main news section -->
-    <div style="flex:3">
-        <div class="latest-news-section">
-            <h2 class="section-title">समाचार</h2>
-            <div class="news-container" id="newsContainer"></div>
-        </div>
-    </div>
-
-    <!-- Latest news sidebar -->
-    <div style="flex:1" class="latest-news">
-        <h3>ताज़ा समाचार</h3>
-        <ul id="latestNewsSidebar" style="list-style:none; padding:0;"></ul>
-    </div>
-
-</div>
-
-<script>
-const news = JSON.parse(localStorage.getItem('news')) || [];
-const currentPage = 'satna'; // Change per page
 const container = document.getElementById('newsContainer');
 const sidebar = document.getElementById('latestNewsSidebar');
 
-news.filter(post => post.page === currentPage).forEach(post => {
-    // Add news card
-    container.innerHTML += `
+const currentPage = 'satna'; // change on every page
+
+let allNews = [];
+
+fetch('news.json')
+.then(res => res.json())
+.then(news => {
+
+    allNews = news;
+
+    displayPagePosts();
+
+    displayBreakingNews();
+
+})
+.catch(err => console.error('Error loading posts:', err));
+
+
+// DISPLAY POSTS
+function displayPagePosts(){
+
+    container.innerHTML='';
+    sidebar.innerHTML='';
+
+    const pagePosts = allNews.filter(post => {
+
+        if(!post.page) return false;
+
+        const pages = post.page.split(',');
+
+        return pages.includes(currentPage);
+
+    });
+
+    pagePosts.forEach(post=>{
+
+        container.innerHTML += `
         <div class="news-card" id="news${post.id}">
-            <div class="news-image"><img src="${post.image}" alt="${post.title}"></div>
-            <div class="news-content">
-                <h3>${post.title}</h3>
-                <button class="read-btn" onclick="toggle(${post.id})">Read More</button>
-                <div id="post${post.id}" class="news-extra">
-                    <p>${post.description}</p>
-                    <small><b>Author :</b> <i>${post.author}</i></small>
-                </div>
+
+            <div class="news-image">
+                <img src="${post.image}" alt="${post.title}">
             </div>
+
+            <div class="news-content">
+
+                <h3>${post.title}</h3>
+
+                <button class="read-btn" onclick="toggle(${post.id})">Read More</button>
+
+                <div id="post${post.id}" class="news-extra">
+
+                    <p>${post.description}</p>
+
+                    <small><b>Author :</b> <i>${post.author}</i></small>
+
+                </div>
+
+            </div>
+
         </div>
-    `;
+        `;
 
-    // Add to latest news sidebar
-    sidebar.innerHTML += `<li style="margin-bottom:10px; cursor:pointer; color:#ff0000;" onclick="scrollToNews(${post.id})">${post.title}</li>`;
-});
+        sidebar.innerHTML += `
+        <li style="margin-bottom:10px; cursor:pointer; color:#ff0000;"
+        onclick="scrollToNews(${post.id})">${post.title}</li>
+        `;
 
-// Toggle description
+    });
+
+}
+
+
+// TOGGLE DESCRIPTION
 function toggle(id){
-    const el = document.getElementById('post'+id);
-    el.style.display = el.style.display === "none" ? "block" : "none";
+
+    const el=document.getElementById('post'+id);
+
+    el.classList.toggle('show');
+
 }
 
-// Scroll to news card on clicking sidebar item
+
+// SCROLL
 function scrollToNews(id){
-    const newsEl = document.getElementById('news'+id);
-    newsEl.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    const newsEl=document.getElementById('news'+id);
+
+    newsEl.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+    });
+
 }
+
+
+// BREAKING NEWS
+function displayBreakingNews(){
+
+    const breaking=document.getElementById('breakingNews');
+
+    allNews.forEach(post=>{
+
+        if(post.breaking){
+
+            breaking.innerHTML+=`<span><b>• ${post.title}</b></span>`;
+
+        }
+
+    });
+
+}
+
+
+// SEARCH
+function searchNews(){
+
+    const query=document.getElementById('searchNews').value.toLowerCase();
+
+    const results = allNews.filter(post=>{
+
+        const pages = post.page ? post.page.split(',') : [];
+
+        return pages.includes(currentPage) &&
+        (post.title.toLowerCase().includes(query) ||
+        post.description.toLowerCase().includes(query));
+
+    });
+
+    container.innerHTML='';
+
+    results.forEach(post=>{
+
+        container.innerHTML+=`
+        <div class="news-card" id="news${post.id}">
+
+            <div class="news-image">
+                <img src="${post.image}" alt="${post.title}">
+            </div>
+
+            <div class="news-content">
+
+                <h3>${post.title}</h3>
+
+                <button class="read-btn" onclick="toggle(${post.id})">Read More</button>
+
+                <div id="post${post.id}" class="news-extra">
+
+                    <p>${post.description}</p>
+
+                    <small><b>Author :</b> <i>${post.author}</i></small>
+
+                </div>
+
+            </div>
+
+        </div>
+        `;
+
+    });
+
+}
+
 </script>
 
 </body>
