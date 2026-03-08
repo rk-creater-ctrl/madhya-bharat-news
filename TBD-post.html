@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Admin Panel</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 
 body{
 font-family:'Segoe UI',Arial;
-background:#f8f5f5;
+background:#ececec;
 padding:30px;
 margin:0;
 }
@@ -35,7 +35,7 @@ padding:12px;
 border-radius:8px;
 border:1px solid #e6cfcf;
 font-size:14px;
-background:#fffafa;
+background:#d3d2d2;
 }
 
 button{
@@ -87,8 +87,6 @@ border-radius:6px;
 background:#922;
 }
 
-/* PROFESSIONAL PAGE SELECTOR */
-
 .page-box{
 margin-top:10px;
 }
@@ -118,7 +116,109 @@ font-size:14px;
 margin-right:8px;
 }
 
+.CKEDITOR{
+    display: none;
+}
+
+/* ===== RESPONSIVE FIX ===== */
+
+*{
+box-sizing:border-box;
+}
+
+/* Form responsive */
+form{
+max-width:420px;
+width:95%;
+margin:auto;
+}
+
+/* Inputs full width */
+input,
+textarea,
+button{
+width:100%;
+max-width:100%;
+}
+
+/* Post container responsive */
+.post-container{
+max-width:750px;
+width:95%;
+margin:35px auto;
+}
+
+/* Prevent text overflow */
+.post{
+word-wrap:break-word;
+overflow-wrap:break-word;
+}
+
+/* Image responsive */
+.post img{
+max-width:100%;
+height:auto;
+}
+
+/* Mobile layout */
+@media (max-width:768px){
+
+body{
+padding:15px;
+}
+
+h2{
+font-size:22px;
+}
+
+form{
+padding:18px;
+}
+
+input,
+textarea,
+button{
+font-size:16px;
+padding:14px;
+}
+
+.post{
+padding:15px;
+}
+
+.post h4{
+font-size:18px;
+}
+
+}
+
+/* Small mobile screens */
+@media (max-width:480px){
+
+body{
+padding:10px;
+}
+
+form{
+width:100%;
+}
+
+.post-container{
+width:100%;
+}
+
+input,
+textarea,
+button{
+font-size:16px;
+}
+
+}
 </style>
+
+<!-- CKEDITOR -->
+<script class="CKEDITOR" src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
 </head>
 
 <body>
@@ -154,37 +254,23 @@ margin-right:8px;
 <div class="page-list">
 
 <label><input type="checkbox" name="page[]" value="home"> होम</label>
-
 <label><input type="checkbox" name="page[]" value="taja-khabar"> ताज़ा खबर</label>
-
 <label><input type="checkbox" name="page[]" value="madhya pradesh"> मध्य प्रदेश</label>
-
 <label><input type="checkbox" name="page[]" value="vindhya"> विंध्य</label>
-
 <label><input type="checkbox" name="page[]" value="Rewa"> रीवा</label>
-
 <label><input type="checkbox" name="page[]" value="satna"> सतना</label>
-
 <label><input type="checkbox" name="page[]" value="maihar"> मैहर</label>
-
 <label><input type="checkbox" name="page[]" value="seedhi"> सीधी</label>
-
 <label><input type="checkbox" name="page[]" value="maugang"> मऊगंज</label>
-
 <label><input type="checkbox" name="page[]" value="chattarpur"> छतरपुर</label>
-
 <label><input type="checkbox" name="page[]" value="panna"> पन्ना</label>
-
 <label><input type="checkbox" name="page[]" value="sahadol"> शहडोल</label>
-
 <label><input type="checkbox" name="page[]" value="rajneeti"> राजनीति</label>
-
 <label><input type="checkbox" name="page[]" value="crime"> क्राइम</label>
 
 </div>
 
 </div>
-
 
 <input type="file" id="image" name="image" accept="image/*" required>
 
@@ -236,6 +322,9 @@ postForm.addEventListener('submit',e=>{
 
 e.preventDefault();
 
+const editorData = CKEDITOR.instances.description.getData();
+document.getElementById('description').value = editorData;
+
 const formData=new FormData(postForm);
 
 fetch('upload_post.php',{
@@ -250,6 +339,7 @@ alert(data.message);
 if(data.status==='success'){
 
 postForm.reset();
+CKEDITOR.instances.description.setData("");
 loadPosts();
 
 }
@@ -313,6 +403,10 @@ if(data.status==='success') loadPosts();
 
 }
 
+</script>
+
+<script>
+CKEDITOR.replace('description');
 </script>
 
 </body>
